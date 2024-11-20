@@ -30,6 +30,8 @@ class Server {
 
     this.app.use("/evoluciones", require("../routes/evoluciones.routes"));
     this.app.use("/recetas", require("../routes/recetas.routes"));
+    this.app.use("/pacientes", require("../routes/pacientes.routes"));
+
   }
 
   listen() {

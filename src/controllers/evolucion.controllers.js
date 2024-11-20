@@ -5,7 +5,6 @@ const crearEvolucion = async (req, res) => {
     const evolucion = await evolucionService.crearEvolucion(req.body);
     res.status(201).json(evolucion);
   } catch (error) {
-    console.error(error); // Agrega un console.log para depurar
     res.status(500).json({ error: error.message });
   }
 };
@@ -19,7 +18,6 @@ const editarEvolucion = async (req, res) => {
     );
     res.status(200).json(evolucion);
   } catch (error) {
-    console.error(error); // Agrega un console.log para depurar
     res.status(500).json({ error: error.message });
   }
 };

@@ -49,8 +49,6 @@ const crearUsuario = async (body) => {
 
   await usuario.save();
 
-  //await darBienvenidaAlUsuario(usuario.emailUsuario, usuario.nombreUsuario);
-
   return {
     msg: "Usuario Creado con Éxito",
     statusCode: 201,
