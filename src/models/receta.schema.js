@@ -17,7 +17,18 @@ const recetaSchema = new mongoose.Schema(
     observaciones: { type: String, maxlength: 500 },
     fecha: { type: Date, default: Date.now },
   },
-  { timestamps: true }
+
+  {
+    timestamps: true,
+    validate: {
+      // Validación para limitar a 2 medicamentos como máximo
+      validator: function (v) {
+        return v.medicamentos.length <= 2;
+      },
+      message: "No puede haber más de 2 medicamentos en la receta.",
+    },
+  }
 );
+
 
 module.exports = mongoose.model("Receta", recetaSchema);
