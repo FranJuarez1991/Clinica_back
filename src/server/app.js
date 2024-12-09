@@ -31,7 +31,14 @@ class Server {
     this.app.use("/evoluciones", require("../routes/evoluciones.routes"));
     this.app.use("/recetas", require("../routes/recetas.routes"));
     this.app.use("/pacientes", require("../routes/pacientes.routes"));
-
+    this.app.use("/diagnosticos", require("../routes/diagnostico.routes"));
+    this.app.use("/medicamentos", require("../routes/medicamento.routes"));
+    this.app.use("/obrasocial", require("../routes/obrasocial.routes"));
+    this.app.use("/medico", require("../routes/medico.routes"));
+    this.app.use(
+      "/historiasClinicas",
+      require("../routes/historiasClinicas.routes")
+    );
   }
 
   listen() {
@@ -40,5 +47,4 @@ class Server {
     });
   }
 }
-
 module.exports = Server;

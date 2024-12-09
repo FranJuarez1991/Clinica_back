@@ -11,6 +11,30 @@ const pacienteSchema = new Schema({
       minlength: 7,
       maxlength: 10,
     },
+    fechaNacimiento: {
+      type: Date,
+      required: true,
+    },
+    edad: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+  },
+  historiaClinicaId: {
+    type: Schema.Types.ObjectId,
+    ref: "HistoriaClinica",
+    required: false, // Lo hacemos opcional
+  },
+  obraSocial: {
+    type: String,
+    required: true,
+  },
+  nroafiliado: {
+    type: Number,
+    required: true,
+    min: 0,
   },
 });
-module.exports = model("Paciente", pacienteSchema); // Usa el nombre correcto del esquema
+
+module.exports = model("Paciente", pacienteSchema);

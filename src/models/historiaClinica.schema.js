@@ -1,17 +1,23 @@
-const { Schema, model, Types } = require("mongoose"); // Importa Types para usar ObjectId
+const mongoose = require("mongoose");
+
+const { Schema, model, Types } = mongoose;
 
 const historiaClinicaSchema = new Schema(
   {
     diagnosticos: [
       {
-        diagnostico: { type: String, required: true },
+        tipo: {
+          type: Types.ObjectId,
+          ref: "Diagnostico", // Referencia al modelo de Diagnóstico
+          required: true,
+        },
         fecha: { type: Date, default: Date.now },
       },
     ],
     evoluciones: [
       {
-        type: Types.ObjectId, // Usa Types.ObjectId en lugar de mongoose.Schema.Types.ObjectId
-        ref: "Evolucion",
+        type: Types.ObjectId,
+        ref: "Evolucion", // Referencia al modelo de Evolución
       },
     ],
     pedidosLaboratorio: [
@@ -30,4 +36,4 @@ const historiaClinicaSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = model("HistoriaClinica", historiaClinicaSchema); // Usa el nombre correcto del esquema
+module.exports = model("HistoriaClinica", historiaClinicaSchema);

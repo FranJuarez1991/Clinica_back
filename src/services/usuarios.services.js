@@ -94,13 +94,13 @@ const iniciarSesion = async (body) => {
     const token = jwt.sign(payload, process.env.JWT_SECRET);
 
     return {
-      msg: "Usuario Logueado",
+      msg: "usuario logueado con Éxito",
       token,
       statusCode: 200,
     };
   }
   return {
-    msg: "Usuario y/o contaseña incorrecta",
+    msg: "Usuario y/o contraseña incorrecta",
     statusCode: 400,
   };
 };

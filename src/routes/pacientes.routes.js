@@ -3,7 +3,7 @@ const { Router } = require("express");
 const {
   crearPacientes,
   buscarPaciente,
-} = require("../controllers/paciente.controllers"); // Asegúrate de que esta ruta esté correcta
+} = require("../controllers/paciente.controllers");
 
 const router = Router();
 
