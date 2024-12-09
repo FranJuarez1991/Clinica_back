@@ -1,19 +1,23 @@
 const mongoose = require("mongoose");
-
-const { Schema, model } = mongoose;
+const { Schema, model, Types } = mongoose;
 
 const evolucionSchema = new Schema(
   {
     medico: {
-      nombre: { type: String, required: true },
-      rol: { type: String, required: true },
+      type: Types.ObjectId, // Referencia al modelo Medico
+      ref: "Medico",
+      required: true,
     },
     fechaHora: { type: Date, default: Date.now },
-    diagnostico: { type: String, required: true },
+    diagnostico: {
+      type: Types.ObjectId, // Se refiere al modelo de Diagnóstico
+      ref: "Diagnostico",
+      required: true,
+    },
     textoLibre: { type: String },
     plantilla: { type: String },
     historiaClinicaId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "HistoriaClinica",
       required: true,
     },
@@ -25,4 +29,4 @@ const evolucionSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Evolucion", evolucionSchema);
+module.exports = model("Evolucion", evolucionSchema);
