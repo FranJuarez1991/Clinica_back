@@ -52,4 +52,6 @@ const recetaSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Receta", recetaSchema);
+const Medico = mongoose.model("Medico", medicoSchema); // Registro del modelo
+
+module.exports = Medico;

@@ -1,32 +1,49 @@
 const mongoose = require("mongoose");
-const { Schema, model, Types } = mongoose;
 
-const evolucionSchema = new Schema(
+const evolucionSchema = new mongoose.Schema(
   {
-    medico: {
-      type: Types.ObjectId, // Referencia al modelo Medico
-      ref: "Medico",
-      required: true,
-    },
-    fechaHora: { type: Date, default: Date.now },
     diagnostico: {
-      type: Types.ObjectId, // Se refiere al modelo de Diagnóstico
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Diagnostico",
-      required: true,
+      required: [true, "El diagnóstico es obligatorio."],
     },
-    textoLibre: { type: String },
-    plantilla: { type: String },
-    historiaClinicaId: {
-      type: Types.ObjectId,
+    texto: {
+      type: String,
+      required: [true, "El texto de la evolución es obligatorio."],
+      minlength: [
+        10,
+        "El texto de la evolución debe tener al menos 10 caracteres.",
+      ],
+      trim: true, // Elimina espacios en blanco al inicio y al final
+    },
+    medico: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Medico", // Asegúrate de que la colección se llame "Medico"
+      required: [true, "El ID del médico es obligatorio."],
+    },
+    historiaClinica: {
+      type: mongoose.Schema.Types.ObjectId,
       ref: "HistoriaClinica",
-      required: true,
+      required: [true, "El ID de la historia clínica es obligatorio."],
     },
-    editableHasta: {
+    fecha: {
       type: Date,
-      default: () => Date.now() + 48 * 60 * 60 * 1000,
+      default: Date.now,
+      immutable: true, // No permite modificaciones después de su creación
+    },
+    tipoEstudio: {
+      type: String,
+      default: "N/A",
+      enum: ["N/A", "Laboratorio", "Imagen", "Consulta", "Otro"], // Opciones válidas
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true, // Crea automáticamente `createdAt` y `updatedAt`
+  }
 );
 
-module.exports = model("Evolucion", evolucionSchema);
+// Índices para mejorar consultas
+evolucionSchema.index({ medico: 1 });
+evolucionSchema.index({ historiaClinica: 1, fecha: -1 });
+
+module.exports = mongoose.model("Evolucion", evolucionSchema);

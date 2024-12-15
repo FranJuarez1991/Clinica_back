@@ -31,6 +31,7 @@ const crearPacientes = async (req, res) => {
       },
     ];
 
+    // Validación de que el paciente no exista previamente por DNI
     for (const paciente of pacientes) {
       if (!paciente.paciente.dni) {
         throw new Error(
@@ -46,22 +47,37 @@ const crearPacientes = async (req, res) => {
       }
     }
 
-    // Crear historias clínicas para cada paciente
+    // Crear pacientes
+    const pacientesCreados = await Paciente.insertMany(pacientes);
+
+    // Crear historias clínicas para cada paciente creado
     const historiasClinicas = await Promise.all(
-      pacientes.map(() => HistoriaClinica.create({})) // Crear historias vacías
+      pacientesCreados.map((paciente) =>
+        HistoriaClinica.create({
+          paciente: paciente._id, // Asignar el _id del paciente creado
+        })
+      )
     );
 
-    // Asignar las historias clínicas a los pacientes
-    const pacientesConHistorias = pacientes.map((paciente, index) => ({
-      ...paciente,
-      historiaClinicaId: historiasClinicas[index]._id,
+    // Asignar las historias clínicas a los pacientes creados
+    const pacientesConHistorias = pacientesCreados.map((paciente, index) => ({
+      ...paciente.toObject(),
+      historiaClinicaId: historiasClinicas[index]._id, // Asocia la historia clínica creada al paciente
     }));
 
-    const resultado = await Paciente.insertMany(pacientesConHistorias);
+    // Actualizar los pacientes con el campo historiaClinicaId
+    await Paciente.bulkWrite(
+      pacientesConHistorias.map((paciente) => ({
+        updateOne: {
+          filter: { _id: paciente._id },
+          update: { historiaClinicaId: paciente.historiaClinicaId },
+        },
+      }))
+    );
 
     return res.status(201).json({
       message: "Pacientes creados correctamente",
-      data: resultado,
+      data: pacientesConHistorias,
     });
   } catch (error) {
     return res.status(500).json({
@@ -70,6 +86,7 @@ const crearPacientes = async (req, res) => {
     });
   }
 };
+
 // Función para buscar un paciente por DNI
 const buscarPaciente = async (req, res) => {
   const { dni } = req.params; // Obtenemos el DNI desde los parámetros de la URL
