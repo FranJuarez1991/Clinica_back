@@ -24,7 +24,7 @@ const pacienteSchema = new Schema({
   historiaClinicaId: {
     type: Schema.Types.ObjectId,
     ref: "HistoriaClinica",
-    required: false, // Lo hacemos opcional
+    //required: false, // Lo hacemos opcional
   },
   obraSocial: {
     type: String,
